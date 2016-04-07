@@ -25,15 +25,18 @@ static void err_doit( int print_errno, int level, const char *fmt, va_list ap )
      char buf[ MAXLINE + 1 ] = { 0 };
      const int errno_save = errno;  /* значение может понадобиться вызвавшему процессу */
 
-     vsnprintf( buf, MAXLINE, fmt, ap ); /* защищенный вариант */
+     const int written = vsnprintf( buf, MAXLINE, fmt, ap ); /* защищенный вариант */
+
+     if( print_errno )
+          snprintf( buf + written, MAXLINE - written, ": %s", strerror( errno_save ) );
 
      if( daemon_proc )
      {
-          syslog( level, "%s: %s", buf, (print_errno ? strerror( errno_save ) : "[no errno used]") );
+          syslog( level, "%s", buf );
      }
      else
      {
-          fprintf( stderr, "%s: %s\n", buf, (print_errno ? strerror( errno_save ) : "[no errno used]") );
+          fprintf( stderr, "%s\n", buf );
      }
      return;
 }
