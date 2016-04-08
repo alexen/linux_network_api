@@ -33,8 +33,7 @@ int main( int ac, char** av )
      if( inet_pton( AF_INET6, av[ 1 ], &servaddr.sin6_addr ) <= 0 )
           err_quit( "inet_pton error for %s", av[ 1 ] );
 
-     if( connect( sockfd, (struct sockaddr*) &servaddr, sizeof( servaddr ) ) < 0 )
-          err_sys( "connect error" );
+     wrp_connect( sockfd, (struct sockaddr*) &servaddr, sizeof( servaddr ) );
 
      char recvline[ MAXLINE + 1 ] = { 0 };
      int n = 0;

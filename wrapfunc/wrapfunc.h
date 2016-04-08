@@ -13,10 +13,12 @@
 #ifndef WRAPFUNC_WRAPFUNC_H_
 #define WRAPFUNC_WRAPFUNC_H_
 
+#include <sys/socket.h>
 #include <pthread.h>
 
 
 int wrp_socket( int domain, int type, int protocol );
+int wrp_connect( int sockfd, const struct sockaddr* addr, socklen_t len );
 
 void wrp_pthread_mutex_lock( pthread_mutex_t* mutex );
 
