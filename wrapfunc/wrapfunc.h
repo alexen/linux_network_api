@@ -17,10 +17,16 @@
 #include <pthread.h>
 
 
+ssize_t wrp_read( int fd, void* buf, size_t count );
+ssize_t wrp_write( int fd, const void* buf, size_t count );
+
+
 int wrp_socket( int domain, int type, int protocol );
-void wrp_connect( int sockfd, const struct sockaddr* addr, socklen_t len );
-void wrp_bind( int sockfd, const struct sockaddr* addr, socklen_t len );
+void wrp_connect( int sockfd, const struct sockaddr* addr, socklen_t addrlen );
+void wrp_bind( int sockfd, const struct sockaddr* addr, socklen_t addrlen );
 void wrp_listen( int sockfd, int backlog );
+int wrp_accept( int sockfd, struct sockaddr* addr, socklen_t* addrlen );
+
 
 void wrp_pthread_mutex_lock( pthread_mutex_t* mutex );
 

@@ -17,16 +17,16 @@ int wrp_socket( int domain, int type, int protocol )
 }
 
 
-void wrp_connect( int sockfd, const struct sockaddr* addr, socklen_t len )
+void wrp_connect( int sockfd, const struct sockaddr* addr, socklen_t addrlen )
 {
-     if( connect( sockfd, addr, len ) < 0 )
+     if( connect( sockfd, addr, addrlen ) < 0 )
           err_sys( "connect error" );
 }
 
 
-void wrp_bind( int sockfd, const struct sockaddr* addr, socklen_t len )
+void wrp_bind( int sockfd, const struct sockaddr* addr, socklen_t addrlen )
 {
-     if( bind( sockfd, addr, len ) < 0 )
+     if( bind( sockfd, addr, addrlen ) < 0 )
           err_sys( "bind error" );
 }
 
@@ -35,4 +35,13 @@ void wrp_listen( int sockfd, int backlog )
 {
      if( listen( sockfd, backlog ) < 0 )
           err_sys( "listen error" );
+}
+
+
+int wrp_accept( int sockfd, struct sockaddr* addr, socklen_t* addrlen )
+{
+     const int acpt_sock = accept( sockfd, addr, addrlen );
+     if( acpt_sock < 0 )
+          err_sys( "accept error" );
+     return acpt_sock;
 }

@@ -36,16 +36,12 @@ int main( int ac, char** av )
      wrp_connect( sockfd, (struct sockaddr*) &servaddr, sizeof( servaddr ) );
 
      char recvline[ MAXLINE + 1 ] = { 0 };
-     int n = 0;
 
-     while( (n = read( sockfd, recvline, MAXLINE )) > 0 )
+     while( wrp_read( sockfd, recvline, MAXLINE ) > 0 )
      {
           if( fputs( recvline, stdout ) == EOF )
                err_sys( "fputs error" );
      }
-
-     if( n < 0 )
-          err_sys( "read error" );
 
      exit( EXIT_SUCCESS );
 }
