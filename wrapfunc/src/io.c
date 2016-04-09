@@ -24,3 +24,10 @@ ssize_t wrp_write( int fd, const void* buf, size_t count )
           err_sys( "write error" );
      return nbytes;
 }
+
+
+void wrp_close( int fd )
+{
+     if( close( fd ) < 0 )
+          err_ret( "close error" );
+}

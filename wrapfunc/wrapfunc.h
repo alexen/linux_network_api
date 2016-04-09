@@ -19,6 +19,7 @@
 
 ssize_t wrp_read( int fd, void* buf, size_t count );
 ssize_t wrp_write( int fd, const void* buf, size_t count );
+void wrp_close( int fd );
 
 
 int wrp_socket( int domain, int type, int protocol );
