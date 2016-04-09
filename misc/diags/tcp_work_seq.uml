@@ -1,0 +1,28 @@
+@startuml
+participant "Client" as c
+participant "Server" as s
+== Establish connection ==
+note right s: LISTEN
+c -> s: SYN J, MSS=536
+note left c: SYN_SENT
+note right s: SYN_RCVD
+c <- s: SYN K, ACK J+1, MSS=1460
+note left c: ESTABLISHED
+c -> s: ACK K+1
+note right s: ESTABLISHED
+== Send/receive information ==
+c -> s: write
+c <- s: read/write
+...
+== Close connection ==
+c -> s: FIN M
+note left c: FIN_WAIT_1
+note right s: CLOSE_WAIT
+c <- s: ACK M+1
+note left c: FIN_WAIT_2
+c <- s: FIN N
+note right s: LAST_ACK
+note left c: TIME_WAIT
+c -> s: ACK N+1
+note right s: CLOSED
+@enduml
