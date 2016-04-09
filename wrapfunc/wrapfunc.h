@@ -18,7 +18,9 @@
 
 
 int wrp_socket( int domain, int type, int protocol );
-int wrp_connect( int sockfd, const struct sockaddr* addr, socklen_t len );
+void wrp_connect( int sockfd, const struct sockaddr* addr, socklen_t len );
+void wrp_bind( int sockfd, const struct sockaddr* addr, socklen_t len );
+void wrp_listen( int sockfd, int backlog );
 
 void wrp_pthread_mutex_lock( pthread_mutex_t* mutex );
 

@@ -10,17 +10,29 @@
 
 int wrp_socket( int domain, int type, int protocol )
 {
-     const int rc = socket( domain, type, protocol );
-     if( rc < 0 )
+     const int sockfd = socket( domain, type, protocol );
+     if( sockfd < 0 )
           err_sys( "socket error" );
-     return rc;
+     return sockfd;
 }
 
 
-int wrp_connect( int sockfd, const struct sockaddr* addr, socklen_t len )
+void wrp_connect( int sockfd, const struct sockaddr* addr, socklen_t len )
 {
-     const int rc = connect( sockfd, addr, len );
-     if( rc < 0 )
+     if( connect( sockfd, addr, len ) < 0 )
           err_sys( "connect error" );
-     return rc;
+}
+
+
+void wrp_bind( int sockfd, const struct sockaddr* addr, socklen_t len )
+{
+     if( bind( sockfd, addr, len ) < 0 )
+          err_sys( "bind error" );
+}
+
+
+void wrp_listen( int sockfd, int backlog )
+{
+     if( listen( sockfd, backlog ) < 0 )
+          err_sys( "listen error" );
 }
