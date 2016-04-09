@@ -9,7 +9,14 @@ add_subdirectory(error)
 add_subdirectory(wrapfunc)
 
 add_executable(date_time_tcp_cli date_time_tcp_cli.c)
+add_executable(date_time_tcp_srv date_time_tcp_srv.c)
+
 target_link_libraries(date_time_tcp_cli
+    error
+    wrapfunc
+)
+
+target_link_libraries(date_time_tcp_srv
     error
     wrapfunc
 )
