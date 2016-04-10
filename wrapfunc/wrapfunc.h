@@ -21,6 +21,10 @@ ssize_t wrp_read( int fd, void* buf, size_t count );
 ssize_t wrp_write( int fd, const void* buf, size_t count );
 void wrp_close( int fd );
 
+ssize_t read_n( int fd, void* vptr, size_t n );
+ssize_t write_n( int fd, const void* vptr, size_t n );
+ssize_t readline( int fd, void* vptr, size_t maxlen );
+
 
 int wrp_socket( int domain, int type, int protocol );
 void wrp_connect( int sockfd, const struct sockaddr* addr, socklen_t addrlen );
