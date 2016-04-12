@@ -5,6 +5,7 @@
 
 #include <wrapfunc/wrapfunc.h>
 
+#include <stdlib.h> /* for atoi(), getenv() */
 #include <sys/socket.h>
 #include <error/error.h>
 
@@ -33,6 +34,11 @@ void wrp_bind( int sockfd, const struct sockaddr* addr, socklen_t addrlen )
 
 void wrp_listen( int sockfd, int backlog )
 {
+     const char* externalBacklog = getenv( "LISTENQ" );
+
+     if( externalBacklog )
+          backlog = atoi( externalBacklog );
+
      if( listen( sockfd, backlog ) < 0 )
           err_sys( "listen error" );
 }
