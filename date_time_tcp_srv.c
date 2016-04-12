@@ -3,6 +3,7 @@
  *
  */
 
+#include <arpa/inet.h>   /* for inet_ntop() */
 #include <time.h>        /* for time() */
 #include <stdio.h>       /* for snprintf() */
 #include <netinet/in.h>  /* for htonl() */
@@ -26,10 +27,17 @@ int main()
 
      while( 1 )
      {
-          const int acpt_sock = wrp_accept( sockfd, 0, 0 );
+          struct sockaddr_in cliaddr = { 0 };
+          socklen_t cliaddrlen = 0;
+
+          const int acpt_sock =
+               wrp_accept( sockfd, (struct sockaddr*) &cliaddr, &cliaddrlen );
+
+          printf( "accepted connection from %s:%d\n",
+               inet_ntoa( cliaddr.sin_addr ), ntohs( cliaddr.sin_port ) );
 
           const time_t ct = time( 0 );
-          const int nbytes = snprintf( buff, MAXLINE, "%s\r\n", ctime( &ct ) );
+          const int nbytes = snprintf( buff, sizeof( buff ), "%.24s\r\n", ctime( &ct ) );
           wrp_write( acpt_sock, buff, nbytes );
           wrp_close( acpt_sock );
      }
