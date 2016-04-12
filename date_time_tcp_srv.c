@@ -6,9 +6,27 @@
 #include <arpa/inet.h>   /* for inet_ntop() */
 #include <time.h>        /* for time() */
 #include <stdio.h>       /* for snprintf() */
+#include <stdlib.h>      /* for exit( EXIT_SUCCESS ) */
+#include <unistd.h>      /* for getpid() */
 #include <netinet/in.h>  /* for htonl() */
 #include <common/const.h>
 #include <wrapfunc/wrapfunc.h>
+
+
+void process_request( int acpt_sock )
+{
+     char buff[ MAXLINE ] = { 0 };
+
+     const time_t ct = time( 0 );
+     const int nbytes = snprintf( buff, sizeof( buff ), "%.24s\r\n", ctime( &ct ) );
+
+     printf( "[%d]: processing request with time %.24s\n", getpid(), buff );
+
+     wrp_write( acpt_sock, buff, nbytes );
+     wrp_close( acpt_sock );
+
+     exit( EXIT_SUCCESS );
+}
 
 
 int main()
@@ -23,7 +41,8 @@ int main()
      wrp_bind( sockfd, (struct sockaddr*) &servaddr, sizeof( servaddr ) );
      wrp_listen( sockfd, LISTENQ );
 
-     char buff[ MAXLINE ] = { 0 };
+     printf( "[%d]: server started on %s:%d\n", getpid(),
+          inet_ntoa( servaddr.sin_addr ), ntohs( servaddr.sin_port ) );
 
      while( 1 )
      {
@@ -33,14 +52,21 @@ int main()
           const int acpt_sock =
                wrp_accept( sockfd, (struct sockaddr*) &cliaddr, &cliaddrlen );
 
-          printf( "accepted connection from %s:%d\n",
+          printf( "[%d]: accepted connection from %s:%d\n", getpid(),
                inet_ntoa( cliaddr.sin_addr ), ntohs( cliaddr.sin_port ) );
 
-          const time_t ct = time( 0 );
-          const int nbytes = snprintf( buff, sizeof( buff ), "%.24s\r\n", ctime( &ct ) );
-          wrp_write( acpt_sock, buff, nbytes );
-          wrp_close( acpt_sock );
+          if( wrp_fork() == 0 )
+          {
+               /* here we are inside child process */
+               wrp_close( sockfd );
+               process_request( acpt_sock );
+          }
+          else
+          {
+               /* here we are inside parent process */
+               wrp_close( acpt_sock );
+          }
      }
 
-     return 0;
+     exit( EXIT_SUCCESS );
 }

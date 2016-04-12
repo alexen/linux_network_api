@@ -13,6 +13,7 @@
 #include <stdio.h>  /* для vsnprintf() */
 #include <stdlib.h> /* для EXIT_FAILURE */
 #include <string.h> /* для strerror() */
+#include <unistd.h> /* for getpid() */
 
 int daemon_proc; /* устанавливается в ненулевое значение с помощью daemon_init() */
 
@@ -32,11 +33,11 @@ static void err_doit( int print_errno, int level, const char *fmt, va_list ap )
 
      if( daemon_proc )
      {
-          syslog( level, "%s", buf );
+          syslog( level, "[%d]: %s", getpid(), buf );
      }
      else
      {
-          fprintf( stderr, "%s\n", buf );
+          fprintf( stderr, "[%d]: %s\n", getpid(), buf );
      }
      return;
 }

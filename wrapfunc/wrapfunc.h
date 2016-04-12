@@ -33,6 +33,9 @@ void wrp_listen( int sockfd, int backlog );
 int wrp_accept( int sockfd, struct sockaddr* addr, socklen_t* addrlen );
 
 
+pid_t wrp_fork();
+
+
 void wrp_pthread_mutex_lock( pthread_mutex_t* mutex );
 
 

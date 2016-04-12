@@ -1,6 +1,7 @@
 set(LIBNAME wrapfunc)
 
 add_library(${LIBNAME}
+    src/system.c
     src/network.c
     src/thread.c
     src/io.c
