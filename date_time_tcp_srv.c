@@ -20,8 +20,6 @@ void process_request( int acpt_sock )
      const time_t ct = time( 0 );
      const int nbytes = snprintf( buff, sizeof( buff ), "%.24s\r\n", ctime( &ct ) );
 
-     printf( "[%d]: processing request with time %.24s\n", getpid(), buff );
-
      wrp_write( acpt_sock, buff, nbytes );
      wrp_close( acpt_sock );
 
@@ -47,7 +45,7 @@ int main()
      while( 1 )
      {
           struct sockaddr_in cliaddr = { 0 };
-          socklen_t cliaddrlen = 0;
+          socklen_t cliaddrlen = sizeof( cliaddr );
 
           const int acpt_sock =
                wrp_accept( sockfd, (struct sockaddr*) &cliaddr, &cliaddrlen );
