@@ -8,6 +8,8 @@
 #include <stdlib.h> /* for atoi(), getenv() */
 #include <sys/socket.h>
 #include <error/error.h>
+#include <common/const.h>
+
 
 int wrp_socket( int domain, int type, int protocol )
 {
@@ -50,4 +52,21 @@ int wrp_accept( int sockfd, struct sockaddr* addr, socklen_t* addrlen )
      if( acpt_sock < 0 )
           err_sys( "accept error" );
      return acpt_sock;
+}
+
+
+int sockfd_to_family( int sockfd )
+{
+     union {
+          struct sockaddr sa;
+          char data[ MAXSOCKADDR ];
+     }
+     un = {{ 0 }};
+
+     socklen_t len = MAXSOCKADDR;
+
+     if( getsockname( sockfd, (struct sockaddr*) &un.data, &len ) < 0 )
+          return -1;
+
+     return un.sa.sa_family;
 }

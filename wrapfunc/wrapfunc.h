@@ -32,6 +32,7 @@ void wrp_bind( int sockfd, const struct sockaddr* addr, socklen_t addrlen );
 void wrp_listen( int sockfd, int backlog );
 int wrp_accept( int sockfd, struct sockaddr* addr, socklen_t* addrlen );
 
+int sockfd_to_family( int sockfd );
 
 pid_t wrp_fork();
 
