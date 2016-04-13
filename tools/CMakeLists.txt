@@ -1,4 +1,4 @@
-set(LIBNAME wrapfunc)
+set(LIBNAME tools)
 
 add_library(${LIBNAME}
     src/system.c

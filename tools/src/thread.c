@@ -1,12 +1,11 @@
 /*
- * pthread.c
+ * thread.c
  *
  */
 
-#include <wrapfunc/wrapfunc.h>
-
 #include <errno.h>
 #include <error/error.h>
+#include <tools/wrapfunc.h>
 
 void wrp_pthread_mutex_lock( pthread_mutex_t* mutex )
 {

@@ -1,14 +1,13 @@
 /*
- * socket.c
+ * network.c
  *
  */
-
-#include <wrapfunc/wrapfunc.h>
 
 #include <stdlib.h> /* for atoi(), getenv() */
 #include <sys/socket.h>
 #include <error/error.h>
 #include <common/const.h>
+#include <tools/wrapfunc.h>
 
 
 int wrp_socket( int domain, int type, int protocol )

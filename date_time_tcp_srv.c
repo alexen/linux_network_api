@@ -10,7 +10,7 @@
 #include <unistd.h>      /* for getpid() */
 #include <netinet/in.h>  /* for htonl() */
 #include <common/const.h>
-#include <wrapfunc/wrapfunc.h>
+#include <tools/wrapfunc.h>
 
 
 void process_request( int acpt_sock )
