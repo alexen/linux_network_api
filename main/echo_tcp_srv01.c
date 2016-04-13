@@ -4,6 +4,8 @@
  */
 
 #include <stdlib.h>
+#include <stdio.h>
+#include <arpa/inet.h>
 #include <netinet/in.h>
 #include <tools/io.h>
 #include <tools/wrapfunc.h>
@@ -38,6 +40,9 @@ int main()
      wrp_bind( listen_sock, (struct sockaddr*) &servaddr, sizeof( servaddr ) );
      wrp_listen( listen_sock, LISTENQ );
 
+     printf( "server start listening on %s:%d\n",
+          inet_ntoa( servaddr.sin_addr ), ntohs( servaddr.sin_port ) );
+
      while( 1 )
      {
           struct sockaddr_in cliaddr = { 0 };
@@ -45,6 +50,9 @@ int main()
 
           const int connect_sock =
                wrp_accept( listen_sock, (struct sockaddr*) &cliaddr, &cliaddrlen );
+
+          printf( "connection accepted from %s:%d\n",
+               inet_ntoa( cliaddr.sin_addr ), ntohs( cliaddr.sin_port ) );
 
           if( wrp_fork() == 0 )
           {
