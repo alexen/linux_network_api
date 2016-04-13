@@ -12,5 +12,6 @@
 #define BUFFSIZE    8192      /* Размер буфера для чтения и записи */
 #define LISTENQ     1024      /* Размер очереди соединений (второй аргумент для ф-ции listen() */
 #define MAXSOCKADDR 128       /* Максимальный размер структуры sockaddr */
+#define SERV_PORT   9877      /* Порт для серверов TCP и UDP */
 
 #endif /* COMMON_CONST_H_ */
