@@ -19,9 +19,22 @@
 void sig_chld_handler( int signo )
 {
      int stat = 0;
-     const pid_t pid = wait( &stat );
-     printf( "child %d terminated with status %d\n", pid, stat );
+     pid_t pid = 0;
+     while( (pid = waitpid( -1, &stat, WNOHANG )) > 0 )
+          printf( "child %d terminated with status %d\n", pid, stat );
      signal( signo, sig_chld_handler );
+     return;
+}
+
+
+int stop_work = 0;
+
+
+void sig_int_handler( int signo )
+{
+     ( void ) signo;
+     stop_work = 1;
+     return;
 }
 
 
@@ -44,6 +57,7 @@ void echo( int connect_sock )
 int main()
 {
      signal( SIGCHLD, sig_chld_handler );
+     signal( SIGINT, sig_int_handler );
 
      const int listen_sock = wrp_socket( AF_INET, SOCK_STREAM, 0 );
 
@@ -55,10 +69,11 @@ int main()
      wrp_bind( listen_sock, (struct sockaddr*) &servaddr, sizeof( servaddr ) );
      wrp_listen( listen_sock, LISTENQ );
 
-     printf( "server start listening on %s:%d\n",
-          inet_ntoa( servaddr.sin_addr ), ntohs( servaddr.sin_port ) );
+     time_t ct = time( 0 );
+     printf( "server start listening on %s:%d at %.24s\n",
+          inet_ntoa( servaddr.sin_addr ), ntohs( servaddr.sin_port ), ctime( &ct ) );
 
-     while( 1 )
+     while( !stop_work )
      {
           struct sockaddr_in cliaddr = { 0 };
           socklen_t cliaddrlen = sizeof( cliaddr );
@@ -90,6 +105,10 @@ int main()
 
           wrp_close( connect_sock );
      }
+
+     ct = time( 0 );
+     if( stop_work )
+          printf( "server stopped at %.24s\n", ctime( &ct ) );
 
      exit( EXIT_SUCCESS );
 }
