@@ -3,11 +3,24 @@
  *
  */
 
+#include <tools/wrapfunc.h>
+
 #include <stdlib.h> /* for atoi(), getenv() */
 #include <sys/socket.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
 #include <error/error.h>
 #include <common/const.h>
-#include <tools/wrapfunc.h>
+
+
+void wrp_inet_pton( int af, const char* src, void* dst )
+{
+     const int rc = inet_pton( af, src, dst );
+     if( rc < 0 )
+          err_sys( "inet_pton error" );
+     if( rc == 0 )
+          err_quit( "inet_pton error: invalid network address %s", src );
+}
 
 
 int wrp_socket( int domain, int type, int protocol )

@@ -4,9 +4,26 @@
  */
 
 #include <errno.h>
+#include <stdio.h>
 #include <unistd.h>
 #include <error/error.h>
 #include <tools/io.h>
+
+
+char* wrp_fgets( char* s, int size, FILE* stream )
+{
+     char* str = fgets( s, size, stream );
+     if( str == 0 && ferror( stream ) )
+          err_sys( "fgets error" );
+     return str;
+}
+
+
+void wrp_fputs( const char* str, FILE* ostream )
+{
+     if( fputs( str, ostream ) == EOF )
+          err_sys( "fputs error" );
+}
 
 
 ssize_t wrp_read( int fd, void* buf, size_t count )
