@@ -6,12 +6,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <errno.h>
 #include <sys/wait.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <tools/io.h>
 #include <tools/wrapfunc.h>
 #include <common/const.h>
+#include <error/error.h>
 
 
 void sig_chld_handler( int signo )
@@ -19,6 +21,7 @@ void sig_chld_handler( int signo )
      int stat = 0;
      const pid_t pid = wait( &stat );
      printf( "child %d terminated with status %d\n", pid, stat );
+     signal( signo, sig_chld_handler );
 }
 
 
@@ -61,7 +64,15 @@ int main()
           socklen_t cliaddrlen = sizeof( cliaddr );
 
           const int connect_sock =
-               wrp_accept( listen_sock, (struct sockaddr*) &cliaddr, &cliaddrlen );
+               accept( listen_sock, (struct sockaddr*) &cliaddr, &cliaddrlen );
+
+          if( connect_sock < 0 )
+          {
+               if( errno == EINTR )
+                    continue;
+               else
+                    err_sys( "accept error" );
+          }
 
           printf( "connection accepted from %s:%d\n",
                inet_ntoa( cliaddr.sin_addr ), ntohs( cliaddr.sin_port ) );
