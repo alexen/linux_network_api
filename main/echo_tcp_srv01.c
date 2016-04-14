@@ -3,13 +3,23 @@
  *
  */
 
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
+#include <sys/wait.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <tools/io.h>
 #include <tools/wrapfunc.h>
 #include <common/const.h>
+
+
+void sig_chld_handler( int signo )
+{
+     int stat = 0;
+     const pid_t pid = wait( &stat );
+     printf( "child %d terminated with status %d\n", pid, stat );
+}
 
 
 void echo( int connect_sock )
@@ -30,6 +40,8 @@ void echo( int connect_sock )
 
 int main()
 {
+     signal( SIGCHLD, sig_chld_handler );
+
      const int listen_sock = wrp_socket( AF_INET, SOCK_STREAM, 0 );
 
      struct sockaddr_in servaddr = { 0 };
