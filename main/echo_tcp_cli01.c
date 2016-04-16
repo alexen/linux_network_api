@@ -24,7 +24,7 @@ void input_line( FILE* istream, int sockfd )
           write_n( sockfd, sendline, strlen( sendline ) );
 
           if( readline( sockfd, recvline, sizeof( recvline ) ) == 0 )
-               err_quit( "input_line: server terminated prematurely" );
+               err_quit( "input_line: server shutdown" );
 
           wrp_fputs( recvline, stdout );
      }
@@ -58,7 +58,7 @@ void input_line_v2( FILE* istream, int sockfd )
                     if( input_finished == 1 )
                          return; /* нормальное завершение */
                     else
-                         err_quit( "input_line: server terminated prematurely" );
+                         err_quit( "input_line: server shutdown" );
                }
                wrp_fputs( recvline, stdout );
           }

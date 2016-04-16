@@ -27,14 +27,11 @@ void sig_chld_handler( int signo )
 }
 
 
-int stop_work = 0;
-
-
 void sig_int_handler( int signo )
 {
-     ( void ) signo;
-     stop_work = 1;
-     return;
+     time_t ct = time( 0 );
+     printf( "server stopped at %.24s\n", ctime( &ct ) );
+     exit( EXIT_SUCCESS );
 }
 
 
@@ -45,10 +42,8 @@ void echo( int connect_sock )
      while( 1 )
      {
           const ssize_t n = readline( connect_sock, line, MAXLINE );
-
           if( n == 0 )
                return;
-
           write_n( connect_sock, line, n );
      }
 }
@@ -68,7 +63,7 @@ int main()
      printf( "server start listening on %s:%d at %.24s\n",
           listen_addr, listen_port, ctime( &ct ) );
 
-     while( !stop_work )
+     while( 1 )
      {
           struct sockaddr_in cliaddr = { 0 };
           socklen_t cliaddrlen = sizeof( cliaddr );
@@ -100,10 +95,6 @@ int main()
 
           wrp_close( connect_sock );
      }
-
-     ct = time( 0 );
-     if( stop_work )
-          printf( "server stopped at %.24s\n", ctime( &ct ) );
 
      exit( EXIT_SUCCESS );
 }
