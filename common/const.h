@@ -14,4 +14,7 @@
 #define MAXSOCKADDR 128       /* Максимальный размер структуры sockaddr */
 #define SERV_PORT   9877      /* Порт для серверов TCP и UDP */
 
+#define MIN_OF( a, b )   ((a) < (b) ? (a) : (b))
+#define MAX_OF( a, b )   ((a) > (b) ? (a) : (b))
+
 #endif /* COMMON_CONST_H_ */
