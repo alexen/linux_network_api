@@ -12,7 +12,7 @@
 
 
 int sockfd_to_family( int sockfd );
-int set_sockaddr_v4( struct sockaddr_in* sockaddr, const char* addr, int port );
+int set_sockaddr_ipv4( struct sockaddr_in* sockaddr, const char* addr, int port );
 
 
 #endif /* TOOLS_NETWORK_H_ */
