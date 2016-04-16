@@ -111,3 +111,53 @@ void wrp_set_sockaddr_v4( struct sockaddr_in* sockaddr, const char* addr, int po
      if( set_sockaddr_ipv4( sockaddr, addr, port ) < 0 )
           err_sys( "set_sockaddr_v4 error" );
 }
+
+
+int create_connected_socket_ipv4( const char* addr, int port )
+{
+     struct sockaddr_in sa = { 0 };
+     const int sockfd = socket( AF_INET, SOCK_STREAM, 0 );
+     if( !(sockfd < 0) )
+     {
+          if( set_sockaddr_ipv4( &sa, addr, port ) < 0 )
+               return -1;
+          if( connect( sockfd, (struct sockaddr*) &sa, sizeof( sa ) ) < 0 )
+               return -1;
+     }
+     return sockfd;
+}
+
+
+int create_listened_socket_ipv4( const char* addr, int port )
+{
+     struct sockaddr_in sa = { 0 };
+     const int sockfd = socket( AF_INET, SOCK_STREAM, 0 );
+     if( !(sockfd < 0) )
+     {
+          if( set_sockaddr_ipv4( &sa, addr, port ) < 0 )
+               return -1;
+          if( bind( sockfd, (struct sockaddr*) &sa, sizeof( sa ) ) < 0 )
+               return -1;
+          if( listen( sockfd, LISTENQ ) < 0 )
+               return -1;
+     }
+     return sockfd;
+}
+
+
+int wrp_create_connected_socket_ipv4( const char* addr, int port )
+{
+     const int sockfd = create_connected_socket_ipv4( addr, port );
+     if( sockfd < 0 )
+          err_sys( "create_connected_socket_ipv4 error" );
+     return sockfd;
+}
+
+
+int wrp_create_listened_socket_ipv4( const char* addr, int port )
+{
+     const int sockfd = create_listened_socket_ipv4( addr, port );
+     if( sockfd < 0 )
+          err_sys( "create_listened_socket_ipv4 error" );
+     return sockfd;
+}

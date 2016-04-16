@@ -59,16 +59,14 @@ int main()
      signal( SIGCHLD, sig_chld_handler );
      signal( SIGINT, sig_int_handler );
 
-     const int listen_sock = wrp_socket( AF_INET, SOCK_STREAM, 0 );
+     const char* listen_addr = "*";
+     const int listen_port = SERV_PORT;
 
-     struct sockaddr_in servaddr = { 0 };
-     wrp_set_sockaddr_v4( &servaddr, "*", SERV_PORT );
-     wrp_bind( listen_sock, (struct sockaddr*) &servaddr, sizeof( servaddr ) );
-     wrp_listen( listen_sock, LISTENQ );
+     const int listen_sock = wrp_create_listened_socket_ipv4( listen_addr, listen_port );
 
      time_t ct = time( 0 );
      printf( "server start listening on %s:%d at %.24s\n",
-          inet_ntoa( servaddr.sin_addr ), ntohs( servaddr.sin_port ), ctime( &ct ) );
+          listen_addr, listen_port, ctime( &ct ) );
 
      while( !stop_work )
      {

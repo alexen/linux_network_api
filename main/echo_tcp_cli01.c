@@ -84,11 +84,7 @@ int main( int ac, char** av )
           err_quit( "usage: %s <IP address>\n", basename( av[ 0 ] ) );
      }
 
-     const int sockfd = wrp_socket( AF_INET, SOCK_STREAM, 0 );
-
-     struct sockaddr_in servaddr = { 0 };
-     wrp_set_sockaddr_v4( &servaddr, av[ 1 ], SERV_PORT );
-     wrp_connect( sockfd, (struct sockaddr*) &servaddr, sizeof( servaddr ) );
+     const int sockfd = wrp_create_connected_socket_ipv4( av[1], SERV_PORT );
 
      input_line_v2( stdin, sockfd );
 

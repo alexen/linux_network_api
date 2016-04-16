@@ -23,17 +23,7 @@ int main( int ac, char** av )
      if( ac != 2 )
           err_quit( "usage: %s <IP-address>", basename( av[ 0 ] ) );
 
-     const int sockfd = wrp_socket( AF_INET, SOCK_STREAM, 0 );
-
-     struct sockaddr_in servaddr = { 0 };
-
-     servaddr.sin_family = AF_INET;
-     servaddr.sin_port = htons( DATETIME_SERVER_PORT );
-
-     if( inet_pton( AF_INET, av[ 1 ], &servaddr.sin_addr ) <= 0 )
-          err_quit( "inet_pton error for %s", av[ 1 ] );
-
-     wrp_connect( sockfd, (struct sockaddr*) &servaddr, sizeof( servaddr ) );
+     const int sockfd = wrp_create_connected_socket_ipv4( av[1], DATETIME_SERVER_PORT );
 
      char recvline[ MAXLINE + 1 ] = { 0 };
 

@@ -29,18 +29,12 @@ void process_request( int acpt_sock )
 
 int main()
 {
-     struct sockaddr_in servaddr = { 0 };
-     servaddr.sin_family = AF_INET;
-     servaddr.sin_addr.s_addr = htonl( INADDR_ANY );
-     servaddr.sin_port = htons( 13 );
+     const char* listen_addr = "*";
+     const int listen_port = 13;
 
-     const int sockfd = wrp_socket( AF_INET, SOCK_STREAM, 0 );
+     const int sockfd = wrp_create_listened_socket_ipv4( listen_addr, listen_port );
 
-     wrp_bind( sockfd, (struct sockaddr*) &servaddr, sizeof( servaddr ) );
-     wrp_listen( sockfd, LISTENQ );
-
-     printf( "[%d]: server started on %s:%d\n", getpid(),
-          inet_ntoa( servaddr.sin_addr ), ntohs( servaddr.sin_port ) );
+     printf( "[%d]: server started on %s:%d\n", getpid(), listen_addr, listen_port );
 
      while( 1 )
      {
