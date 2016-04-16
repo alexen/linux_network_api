@@ -82,3 +82,21 @@ int sockfd_to_family( int sockfd )
 
      return un.sa.sa_family;
 }
+
+
+int set_sockaddr_v4( struct sockaddr_in* sockaddr, const char* addr, int port )
+{
+     sockaddr->sin_family = AF_INET;
+     sockaddr->sin_port = htons( port );
+     return inet_pton( AF_INET, addr, &sockaddr->sin_addr );
+}
+
+
+void wrp_set_sockaddr_v4( struct sockaddr_in* sockaddr, const char* addr, int port )
+{
+     const int rc = set_sockaddr_v4( sockaddr, addr, port );
+     if( rc < 0 )
+          err_sys( "set_sockaddr_v4 error" );
+     if( rc == 0 )
+          err_quit( "set_sockaddr_v4 error: invalid network address %s", addr );
+}

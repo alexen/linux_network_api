@@ -15,8 +15,12 @@
 #define TOOLS_WRAPFUNC_H_
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <sys/select.h>
 #include <sys/socket.h>
+#include <netinet/in.h>
 #include <pthread.h>
+
 
 char* wrp_fgets( char* s, int size, FILE* stream );
 void wrp_fputs( const char* str, FILE* ostream );
@@ -25,6 +29,7 @@ ssize_t wrp_write( int fd, const void* buf, size_t count );
 void wrp_close( int fd );
 
 void wrp_inet_pton( int af, const char* src, void* dst );
+void wrp_set_sockaddr_v4( struct sockaddr_in* sockaddr, const char* addr, int port );
 
 int wrp_socket( int domain, int type, int protocol );
 void wrp_connect( int sockfd, const struct sockaddr* addr, socklen_t addrlen );
@@ -33,6 +38,7 @@ void wrp_listen( int sockfd, int backlog );
 int wrp_accept( int sockfd, struct sockaddr* addr, socklen_t* addrlen );
 
 pid_t wrp_fork();
+int wrp_select( int nfds, fd_set* readfds, fd_set* writefds, fd_set* exceptfds, struct timeval* timeout );
 
 void wrp_pthread_mutex_lock( pthread_mutex_t* mutex );
 
