@@ -5,7 +5,9 @@
 
 #include <tools/wrapfunc.h>
 
+#include <errno.h>
 #include <stdlib.h> /* for atoi(), getenv() */
+#include <string.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
@@ -88,15 +90,24 @@ int set_sockaddr_v4( struct sockaddr_in* sockaddr, const char* addr, int port )
 {
      sockaddr->sin_family = AF_INET;
      sockaddr->sin_port = htons( port );
-     return inet_pton( AF_INET, addr, &sockaddr->sin_addr );
+     if( strcmp( addr, "*" ) == 0 )
+     {
+          sockaddr->sin_addr.s_addr = htonl( INADDR_ANY );
+          return 0;
+     }
+
+     const int rc = inet_pton( AF_INET, addr, &sockaddr->sin_addr );
+     if( rc == 0 )
+     {
+          errno = EINVAL;
+          return -1;
+     }
+     return 0;
 }
 
 
 void wrp_set_sockaddr_v4( struct sockaddr_in* sockaddr, const char* addr, int port )
 {
-     const int rc = set_sockaddr_v4( sockaddr, addr, port );
-     if( rc < 0 )
+     if( set_sockaddr_v4( sockaddr, addr, port ) < 0 )
           err_sys( "set_sockaddr_v4 error" );
-     if( rc == 0 )
-          err_quit( "set_sockaddr_v4 error: invalid network address %s", addr );
 }

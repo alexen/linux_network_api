@@ -62,10 +62,7 @@ int main()
      const int listen_sock = wrp_socket( AF_INET, SOCK_STREAM, 0 );
 
      struct sockaddr_in servaddr = { 0 };
-     servaddr.sin_family = AF_INET;
-     servaddr.sin_addr.s_addr = htonl( INADDR_ANY );
-     servaddr.sin_port = htons( SERV_PORT );
-
+     wrp_set_sockaddr_v4( &servaddr, "*", SERV_PORT );
      wrp_bind( listen_sock, (struct sockaddr*) &servaddr, sizeof( servaddr ) );
      wrp_listen( listen_sock, LISTENQ );
 
