@@ -37,12 +37,16 @@ void input_line_v2( FILE* istream, int sockfd )
      char recvline[ MAXLINE ] = { 0 };
      fd_set rset;
 
-     FD_ZERO( &rset );
      const int istrfd = fileno( istream );
+     int input_finished = 0;
+     FD_ZERO( &rset );
      while( 1 )
      {
-          FD_SET( istrfd, &rset );
+          input_finished == 0
+               ? FD_SET( istrfd, &rset )
+               : FD_CLR( istrfd, &rset );
           FD_SET( sockfd, &rset );
+
           const int maxfdp1 = MAX_OF( istrfd, sockfd ) + 1;
 
           wrp_select( maxfdp1, &rset, 0, 0, 0 );
@@ -50,15 +54,24 @@ void input_line_v2( FILE* istream, int sockfd )
           if( FD_ISSET( sockfd, &rset ) ) /* сокет готов на чтение */
           {
                if( readline( sockfd, recvline, MAXLINE ) == 0 )
-                    err_quit( "input_line: server terminated prematurely" );
+               {
+                    if( input_finished == 1 )
+                         return; /* нормальное завершение */
+                    else
+                         err_quit( "input_line: server terminated prematurely" );
+               }
                wrp_fputs( recvline, stdout );
           }
 
           if( FD_ISSET( istrfd, &rset ) ) /* входной поток готов на чтение */
           {
                if( fgets( sendline, MAXLINE, istream ) == 0 )
-                    return;
-               write_n( sockfd, sendline, strlen( sendline ) );
+               {
+                    input_finished = 1;
+                    shutdown( sockfd, SHUT_WR );
+               }
+               else
+                    write_n( sockfd, sendline, strlen( sendline ) );
           }
      }
 }
