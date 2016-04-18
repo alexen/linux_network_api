@@ -24,3 +24,12 @@ int wrp_select( int nfds, fd_set* readfds, fd_set* writefds, fd_set* exceptfds, 
           err_sys( "select error" );
      return rc;
 }
+
+
+int wrp_poll( struct pollfd* fds, nfds_t nfds, int timeout )
+{
+     const int nready = poll( fds, nfds, timeout );
+     if( nready < 0 )
+          err_sys( "poll error" );
+     return nready;
+}

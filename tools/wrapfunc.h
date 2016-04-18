@@ -14,6 +14,7 @@
 #ifndef TOOLS_WRAPFUNC_H_
 #define TOOLS_WRAPFUNC_H_
 
+#include <poll.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/select.h>
@@ -41,6 +42,7 @@ int wrp_accept( int sockfd, struct sockaddr* addr, socklen_t* addrlen );
 
 pid_t wrp_fork();
 int wrp_select( int nfds, fd_set* readfds, fd_set* writefds, fd_set* exceptfds, struct timeval* timeout );
+int wrp_poll( struct pollfd* fds, nfds_t nfds, int timeout );
 
 void wrp_pthread_mutex_lock( pthread_mutex_t* mutex );
 
