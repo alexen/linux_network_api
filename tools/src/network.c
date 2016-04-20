@@ -161,3 +161,23 @@ int wrp_create_listened_socket_ipv4( const char* addr, int port )
           err_sys( "create_listened_socket_ipv4 error" );
      return sockfd;
 }
+
+
+ssize_t w_sendto( int sockfd, const void* buf, size_t len, int flags,
+     const struct sockaddr* addr, socklen_t addrlen )
+{
+     const ssize_t nbytes = sendto( sockfd, buf, len, flags, addr, addrlen );
+     if( nbytes < 0 )
+          err_sys( "sendto error" );
+     return nbytes;
+}
+
+
+ssize_t w_recvfrom( int sockfd, void* buf, size_t len, int flags,
+     struct sockaddr* addr, socklen_t* addrlen )
+{
+     const ssize_t nbytes = recvfrom( sockfd, buf, len, flags, addr, addrlen );
+     if( nbytes < 0 )
+          err_sys( "recvfrom error" );
+     return nbytes;
+}

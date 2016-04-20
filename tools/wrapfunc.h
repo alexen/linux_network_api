@@ -40,6 +40,11 @@ void wrp_bind( int sockfd, const struct sockaddr* addr, socklen_t addrlen );
 void wrp_listen( int sockfd, int backlog );
 int wrp_accept( int sockfd, struct sockaddr* addr, socklen_t* addrlen );
 
+ssize_t w_sendto( int sockfd, const void* buf, size_t len, int flags,
+     const struct sockaddr* addr, socklen_t addrlen );
+ssize_t w_recvfrom( int sockfd, void* buf, size_t len, int flags,
+     struct sockaddr* addr, socklen_t* addrlen );
+
 pid_t wrp_fork();
 int wrp_select( int nfds, fd_set* readfds, fd_set* writefds, fd_set* exceptfds, struct timeval* timeout );
 int wrp_poll( struct pollfd* fds, nfds_t nfds, int timeout );
