@@ -4,33 +4,12 @@ add_executable(echo_tcp_srv01 echo_tcp_srv01.c)
 add_executable(echo_tcp_cli01 echo_tcp_cli01.c)
 add_executable(echo_tcp_srv_select01 echo_tcp_srv_select01.c)
 add_executable(echo_tcp_srv_poll01 echo_tcp_srv_poll01.c)
+add_executable(echo_udp_srv01 echo_udp_srv01.c)
 
-target_link_libraries(date_time_tcp_cli
-    error
-    tools
-)
-
-target_link_libraries(date_time_tcp_srv
-    error
-    tools
-)
-
-target_link_libraries(echo_tcp_srv01
-    error
-    tools
-)
-
-target_link_libraries(echo_tcp_cli01
-    error
-    tools
-)
-
-target_link_libraries(echo_tcp_srv_select01
-    error
-    tools
-)
-
-target_link_libraries(echo_tcp_srv_poll01
-    error
-    tools
-)
+target_link_libraries(date_time_tcp_cli error tools)
+target_link_libraries(date_time_tcp_srv error tools)
+target_link_libraries(echo_tcp_srv01 error tools)
+target_link_libraries(echo_tcp_cli01 error tools)
+target_link_libraries(echo_tcp_srv_select01 error tools)
+target_link_libraries(echo_tcp_srv_poll01 error tools)
+target_link_libraries(echo_udp_srv01 error tools)
