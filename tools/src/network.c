@@ -113,6 +113,21 @@ void wrp_set_sockaddr_v4( struct sockaddr_in* sockaddr, const char* addr, int po
 }
 
 
+int create_bound_socket_ipv4( int socktype, const char* addr, int port )
+{
+     struct sockaddr_in sa = { 0 };
+     const int sockfd = socket( AF_INET, socktype, 0 );
+     if( !(sockfd < 0) )
+     {
+          if( set_sockaddr_ipv4( &sa, addr, port ) < 0 )
+               return -1;
+          if( bind( sockfd, (struct sockaddr*) &sa, sizeof( sa ) ) < 0 )
+               return -1;
+     }
+     return sockfd;
+}
+
+
 int create_connected_socket_ipv4( const char* addr, int port )
 {
      struct sockaddr_in sa = { 0 };
@@ -130,17 +145,21 @@ int create_connected_socket_ipv4( const char* addr, int port )
 
 int create_listened_socket_ipv4( const char* addr, int port )
 {
-     struct sockaddr_in sa = { 0 };
-     const int sockfd = socket( AF_INET, SOCK_STREAM, 0 );
+     const int sockfd = create_bound_socket_ipv4( SOCK_STREAM, addr, port );
      if( !(sockfd < 0) )
      {
-          if( set_sockaddr_ipv4( &sa, addr, port ) < 0 )
-               return -1;
-          if( bind( sockfd, (struct sockaddr*) &sa, sizeof( sa ) ) < 0 )
-               return -1;
           if( listen( sockfd, LISTENQ ) < 0 )
                return -1;
      }
+     return sockfd;
+}
+
+
+int wrp_create_bound_socket_ipv4( int socktype, const char* addr, int port )
+{
+     const int sockfd = create_bound_socket_ipv4( socktype, addr, port );
+     if( sockfd < 0 )
+          err_sys( "create_bound_socket_ipv4 error" );
      return sockfd;
 }
 

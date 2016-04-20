@@ -6,8 +6,9 @@
  * Функции-обертки функционируют также, как и стандартные функции,
  * но при этом обрабатывают и выводят на печать собственные ошибки.
  *
- * Функции-обертки содержат в названии префикс wrp_
- * Например, для функции socket() аналогичная обертка будет называться wrp_socket().
+ * Функции-обертки содержат в названии префикс wrp_ или w_
+ * Например, для функции socket() аналогичная обертка будет называться
+ * wrp_socket() или w_socket().
  *
  */
 
@@ -32,8 +33,10 @@ void wrp_close( int fd );
 void wrp_inet_pton( int af, const char* src, void* dst );
 void wrp_set_sockaddr_v4( struct sockaddr_in* sockaddr, const char* addr, int port );
 
+int wrp_create_bound_socket_ipv4( int socktype, const char* addr, int port );
 int wrp_create_listened_socket_ipv4( const char* addr, int port );
 int wrp_create_connected_socket_ipv4( const char* addr, int port );
+
 int wrp_socket( int domain, int type, int protocol );
 void wrp_connect( int sockfd, const struct sockaddr* addr, socklen_t addrlen );
 void wrp_bind( int sockfd, const struct sockaddr* addr, socklen_t addrlen );
