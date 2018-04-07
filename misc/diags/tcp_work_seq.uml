@@ -3,26 +3,25 @@ participant "Client" as c
 participant "Server" as s
 == Establish connection ==
 note right s: LISTEN
-c -> s: SYN J, MSS=536
+c -> s: SYN N, MSS=536
 note left c: SYN_SENT
 note right s: SYN_RCVD
-c <- s: SYN K, ACK J+1, MSS=1460
+c <- s: ACK N+1, SYN M, MSS=1460
 note left c: ESTABLISHED
-c -> s: ACK K+1
+c -> s: ACK M+1
 note right s: ESTABLISHED
 == Send/receive information ==
 c -> s: write
 c <- s: read/write
-...
 == Close connection ==
-c -> s: FIN M
+c -> s: FIN N
 note left c: FIN_WAIT_1
 note right s: CLOSE_WAIT
-c <- s: ACK M+1
+c <- s: ACK N+1
 note left c: FIN_WAIT_2
-c <- s: FIN N
+c <- s: FIN M
 note right s: LAST_ACK
 note left c: TIME_WAIT
-c -> s: ACK N+1
+c -> s: ACK M+1
 note right s: CLOSED
 @enduml
