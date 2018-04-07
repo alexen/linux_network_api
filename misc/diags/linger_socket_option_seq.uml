@@ -1,0 +1,35 @@
+@startuml
+
+participant c as "Client"
+participant s as "Server"
+
+== Default close() behaviour ==
+
+note left c: __User space__:\nwrite()\nclose()\n--\n//function close()//\n//finished immediately//
+c->s: data
+c->s: FIN
+note right s: __TCP__:\nData + FIN enqueued
+s->c: ACK data
+s->c: ACK FIN
+note right s: __User space__:\nread()\nclose()
+s->c: FIN
+note left c: TCP
+c->s: ACK ACK
+c->s: ACK FIN
+
+== close() + SO_LINGER behaviour ==
+
+note left c: __User space__:\nwrite()\nclose()\n--\n//function close()//\n//waits ACK segment//
+c->s: data
+c->s: FIN
+note right s: __TCP__:\nData + FIN enqueued
+s->c: ACK data
+s->c: ACK FIN
+note left c: __User space__:\n//function close() finished//
+note right s: __User space__:\nread()\nclose()
+s->c: FIN
+note left c: TCP
+c->s: ACK ACK
+c->s: ACK FIN
+
+@enduml
