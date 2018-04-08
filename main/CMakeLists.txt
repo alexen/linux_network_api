@@ -24,3 +24,6 @@ target_link_libraries(echo_udp_cli01 error tools)
 
 add_executable(gethostbyname gethostbyname.c)
 target_link_libraries(gethostbyname tools)
+
+add_executable(gethostbyaddr gethostbyaddr.c)
+target_link_libraries(gethostbyaddr tools)
