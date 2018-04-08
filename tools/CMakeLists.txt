@@ -5,6 +5,7 @@ add_library(${LIBNAME}
     src/network.c
     src/thread.c
     src/io.c
+    src/hostent_parser.c
 )
 
 target_link_libraries(${LIBNAME}
