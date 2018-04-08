@@ -5,14 +5,32 @@
  *     Author: alexen
  */
 
-#include <arpa/inet.h>
 #include <netdb.h>
 #include <stdio.h>
+#include <tools/hostent_parser.h>
 
 
 void print( FILE* ostream, const char* title, const char* str )
 {
      fprintf( ostream, "   %s: %s\n", title, (str ? str : "--") );
+}
+
+
+void hostname_printer( const char* str )
+{
+     printf( "   hostname: %s\n", str );
+}
+
+
+void alias_printer( const char* str )
+{
+     printf( "   alias: %s\n", str );
+}
+
+
+void address_printer( const char* str )
+{
+     printf( "   address: %s\n", str );
 }
 
 
@@ -27,27 +45,7 @@ int main( int argc, char** argv )
                continue;
           }
           fprintf( stdout, "%s\n", argv[ i ] );
-          print( stdout, "official name", hent->h_name );
-          for( char** alias = hent->h_aliases; *alias; ++alias )
-          {
-               print( stdout, "alias", *alias );
-          }
-          char buffer[ INET6_ADDRSTRLEN ];
-          for( char** addr = hent->h_addr_list; *addr; ++addr )
-          {
-               print(
-                    stdout,
-                    "address",
-                    inet_ntop(
-                         hent->h_addrtype,
-                         *addr,
-                         buffer,
-                         hent->h_addrtype == AF_INET
-                              ? INET_ADDRSTRLEN
-                              : INET6_ADDRSTRLEN
-                         )
-                    );
-          }
-     }
+          parse_hostent( hent, hostname_printer, alias_printer, address_printer );
+      }
      return 0;
 }
