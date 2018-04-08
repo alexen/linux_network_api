@@ -15,6 +15,30 @@
 #include <string.h> /* для strerror() */
 #include <unistd.h> /* for getpid() */
 
+
+void print_error(
+     const char* file,
+     int line,
+     const char* func,
+     const char* message
+     )
+{
+     fprintf( stderr, "%s:%d(%s): %s\n", file, line, func, message );
+}
+
+
+void print_error_and_exit(
+     const char* file,
+     int line,
+     const char* func,
+     const char* message
+     )
+{
+     print_error( file, line, func, message );
+     exit( EXIT_FAILURE );
+}
+
+
 int daemon_proc; /* устанавливается в ненулевое значение с помощью daemon_init() */
 
 /*

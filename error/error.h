@@ -24,12 +24,38 @@ typedef void( *error_handler_t )(
      const char* message
      );
 
+#ifndef __FUNCTION__
+#define __FUNCTION__ __func__
+#endif
 
 #define ERROR_OCCURED_FNC_MSG( handler_name_, function_, message_ ) \
      do{ handler_name_( __FILE__, __LINE__, function_, message_ ); } while( 0 )
 
 #define ERROR_OCCURED_MSG( handler_name_, message_ ) \
      ERROR_OCCURED_FNC_MSG( handler_name_, __FUNCTION__, message_ )
+
+
+void print_error(
+     const char* file,
+     int line,
+     const char* func,
+     const char* message
+     );
+
+
+void print_error_and_exit(
+     const char* file,
+     int line,
+     const char* func,
+     const char* message
+     );
+
+
+#define PRINT_ERROR_AND_EXIT( message_ ) \
+     ERROR_OCCURED_MSG( print_error_and_exit, message_ )
+
+#define PRINT_ERROR( message_ ) \
+     ERROR_OCCURED_MSG( print_error, message_ )
 
 
 /*
